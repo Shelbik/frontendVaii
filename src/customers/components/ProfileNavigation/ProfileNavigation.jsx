@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import { Divider, Drawer, useMediaQuery } from "@mui/material"; 
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../../State/Authentication/Action";
+import { useDispatch } from "react-redux";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HomeIcon from '@mui/icons-material/Home';
@@ -6,13 +10,8 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import EventIcon from '@mui/icons-material/Event';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Divider, Drawer, IconButton, useMediaQuery } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { logout } from "../../../State/Authentication/Action";
-import { useDispatch } from "react-redux";
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import MenuIcon from "@mui/icons-material/Menu";  
-import Profile from "../../Pages/Profile/Profile";
+import React from "react";
+
 
 const menu = [
   { title: "Orders", icon: <ShoppingBagIcon />, path: "orders" },
@@ -46,9 +45,10 @@ const ProfileNavigation = ({ open, handleClose }) => {
       onClose={handleClose}
       open={isSmallScreen ? open : true} 
       anchor="left"
-      sx={{ zIndex: 1, position: "sticky" }}
+      sx={{ zIndex: 1, position: "sticky" , overflowY:"auto"}}
+      
     >
-      <div className="w-[50vw] lg:w-[20vw] h-[100vh] flex flex-col justify-center text-xl pt-16 gap-7">
+      <div className="w-[50vw] lg:w-[20vw] h-[100vh] flex flex-col justify-center text-xl pt-16 gap-6">
         {menu.map((item, i) => (
           <React.Fragment key={i}>
             <div

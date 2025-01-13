@@ -15,34 +15,29 @@ const CustomerRoutes = () => {
   const [openSideBar, setOpenSideBar] = useState(false);
 
   const toggleSidebar = () => {
-    console.log("Sidebar toggle function called");
+    console.log("Sidebar toggle function called"); // Проверяем, срабатывает ли функция
     setOpenSideBar((prevState) => !prevState);
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col">
-      {/* Верхняя часть фиксирована */}
+    <div className="relative">
       <nav className="sticky top-0 z-50">
-        <Navbar onMenuClick={toggleSidebar} />
+        <Navbar onMenuClick={toggleSidebar} /> {/* Передаем функцию */}
       </nav>
-      {/* Основной контент */}
-      <div className="flex-grow">
-        <Routes>
-          <Route exact path="/" element={<HomePage />} />
-          <Route exact path="/account/:register" element={<HomePage />} />
-          <Route exact path="/restaurant/:city/:title/:id" element={<Restaurant />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/payment/success/:id" element={<PaymentSuccess />} />
-          <Route path="/my-profile/*" element={<Profile openSideBar={openSideBar} setOpenSideBar={setOpenSideBar} />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/admin/add-restaurant" element={<CreateRestaurantForm />} />
-          <Route exact path="/password_change_success" element={<PasswordChangeSuccess />} />
-          <Route exact path="/*" element={<NotFound />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route exact path="/" element={<HomePage />} />
+        <Route exact path="/account/:register" element={<HomePage />} />
+        <Route exact path="/restaurant/:city/:title/:id" element={<Restaurant />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/payment/success/:id" element={<PaymentSuccess />} />
+        <Route path="/my-profile/*" element={<Profile openSideBar={openSideBar} setOpenSideBar={setOpenSideBar} />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/admin/add-restaurant" element={<CreateRestaurantForm />} />
+        <Route exact path="/password_change_success" element={<PasswordChangeSuccess />} />
+        <Route exact path="/*" element={<NotFound />} />
+      </Routes>
     </div>
   );
 };
-
 
 export default CustomerRoutes;

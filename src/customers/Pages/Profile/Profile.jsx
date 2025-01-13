@@ -15,29 +15,28 @@ const Profile = ({ openSideBar, setOpenSideBar }) => {
   const handleMenuToggle = () => {
     setOpenSideBar(prevState => !prevState);  // Переключаем состояние (если открыто - закроем, если закрыто - откроем)
   };
-  
 
   return (
-    <div className="lg:flex justify-between">
-      <div className="sticky h-[80vh] lg:w-[20%]">
+    <div className="flex flex-col lg:flex-row justify-between w-full h-screen">
+      {/* Слева — меню профиля */}
+      <div className="sticky top-0 lg:w-[20%] w-full h-[auto] lg:h-full">
         <ProfileNavigation 
-         open={openSideBar} 
-         handleClose={handleMenuToggle}
+          open={openSideBar} 
+          handleClose={handleMenuToggle}
         />
-        
       </div>
-      {/* <Divider orientation="vertical" flexItem /> */}
-      <div className="lg:w-[80%]">
-        <Routes>
-        <Route path="/" element={<UserProfile/>} />
-          <Route path="/orders" element={<Orders/>} />
-          <Route path="/address" element={<UsersAddresses/>} />
-          <Route path="/favorites" element={<Favorite/>} />
-          <Route path="/payments" element={<Orders/>} />
-          <Route path="/events" element={<CustomerEvents/>} />
-          <Route path="/notification" element={<Notifications/>} />
-          <Route path= '/settings' element={<AccountSettings/>}/>
 
+      {/* Контент профиля */}
+      <div className="lg:w-[80%] w-full h-full overflow-auto flex flex-col">
+        <Routes>
+          <Route path="/" element={<UserProfile />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/address" element={<UsersAddresses />} />
+          <Route path="/favorites" element={<Favorite />} />
+          <Route path="/payments" element={<Orders />} />
+          <Route path="/events" element={<CustomerEvents />} />
+          <Route path="/notification" element={<Notifications />} />
+          <Route path='/settings' element={<AccountSettings />} />
         </Routes>
       </div>
     </div>
