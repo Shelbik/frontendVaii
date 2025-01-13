@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import SuperAdminSidebar from "./SuperAdminSideBar";
 import SuperAdminCustomerTable from "./SuperAdminCustomerTable/SuperAdminCustomerTable";
@@ -14,20 +14,36 @@ import RestaurantRequest from "./RestaurantRequest/RestaurantRequest";
 // import AddMenuForm from "./AddMenu/AddMenuForm";
 // import CreateRestaurantForm from "./AddRestaurants/CreateRestaurantForm";
 
-
 const SuperAdmin = () => {
-  return (
-    <div className="lg:flex justify-between">
-      <div className="">
-       
-        <SuperAdminSidebar />
-      </div>
+  // Состояние для управления открытием и закрытием бокового меню
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-      <div className="w-[80vw]">
+  // Функция для переключения видимости бокового меню
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  return (
+    <div className="flex flex-col lg:flex-row">
+      {/* Боковое меню */}
+      <SuperAdminSidebar open={sidebarOpen} handleClose={toggleSidebar} />
+
+      {/* Контент */}
+      <div className="lg:w-3/4 w-full p-5 overflow-auto">
+        {/* Кнопка для открытия/закрытия бокового меню на мобильных устройствах */}
+        <div className="lg:hidden flex justify-between items-center">
+          <button
+            onClick={toggleSidebar}
+            className="text-white p-2 bg-blue-600 rounded-lg"
+          >
+            {sidebarOpen ? "Close Menu" : "Open Menu"}
+          </button>
+        </div>
+
         <Routes>
-          <Route path="/super-admin/customers" element={<Customers/>}></Route>
-          <Route path="/super-admin/restaurants" element={<SuperAdminRestaurant/>}></Route>
-         {/*<Route path="/super-admin/restaurant-request" element={<RestaurantRequest/>}></Route>*/}
+          <Route path="/super-admin/customers" element={<Customers />} />
+          <Route path="/super-admin/restaurants" element={<SuperAdminRestaurant />} />
+          {/* <Route path="/super-admin/restaurant-request" element={<RestaurantRequest />} /> */}
         </Routes>
       </div>
     </div>
