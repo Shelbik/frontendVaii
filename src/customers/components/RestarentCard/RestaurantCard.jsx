@@ -9,6 +9,10 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { isPresentInFavorites } from "../../../config/logic";
 
 const RestaurantCard = ({ data, index }) => {
+
+  
+  
+
   const navigate = useNavigate();
   const { auth } = useSelector((store) => store);
   const jwt=localStorage.getItem("jwt");
@@ -22,7 +26,11 @@ const RestaurantCard = ({ data, index }) => {
   const navigateToRestaurant = () => {
     if(data.open)
     navigate(`/restaurant/${data.address.city}/${data.name}/${data.id}`);
-  };
+  } 
+
+  if (!data) {
+    return <div>Loading...</div>; 
+  }
 
   return (
     <Card className="m-5 w-[18rem] productCard ">
@@ -47,7 +55,7 @@ const RestaurantCard = ({ data, index }) => {
           <span>{data.rating}</span>
         </div> */}
           <p className="text-gray-500 text-sm">
-            {data.description.length > 40
+            {data.description?.length > 40
               ? data.description.substring(0, 40) + "..."
               : data.description}
           </p>
