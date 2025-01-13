@@ -146,13 +146,19 @@ const Cart = () => {
               Choose Delivery Address
             </h1>
             <div className="flex gap-5 flex-wrap justify-center">
-              {auth.user?.addresses.map((item, index) => (
-                <AddressCard
-                  handleSelectAddress={createOrderUsingSelectedAddress}
-                  item={item}
-                  showButton={true}
-                />
-              ))}
+            {auth.user?.addresses?.length > 0 ? (
+  auth.user.addresses.map((item, index) => (
+    <AddressCard
+      key={index}
+      handleSelectAddress={createOrderUsingSelectedAddress}
+      item={item}
+      showButton={true}
+    />
+  ))
+) : (
+  <p>No addresses available.</p>
+)}
+a
 
               <Card className="flex flex-col justify-center items-center p-5  w-64 ">
                 <div className="flex space-x-5">
