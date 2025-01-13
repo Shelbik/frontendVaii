@@ -1,1 +1,2 @@
-# frontendVaii
+npm install 
+npm start
