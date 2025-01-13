@@ -48,6 +48,7 @@ const OrdersTable = ({ isDashboard, name }) => {
   const dispatch = useDispatch();
   const jwt = localStorage.getItem("jwt");
   const { restaurantsOrder } = useSelector((store) => store);
+  console.log("restaurantsOrder", restaurantsOrder);
   const [anchorElArray, setAnchorElArray] = useState([]);
   const { id } = useParams();
 

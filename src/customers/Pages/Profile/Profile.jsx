@@ -18,7 +18,7 @@ const Profile = ({ openSideBar, setOpenSideBar }) => {
 
   return (
     <div className="flex flex-col lg:flex-row justify-between w-full h-screen">
-      {/* Слева — меню профиля */}
+      
       <div className="sticky top-0 lg:w-[20%] w-full h-[auto] lg:h-full">
         <ProfileNavigation 
           open={openSideBar} 
@@ -26,7 +26,7 @@ const Profile = ({ openSideBar, setOpenSideBar }) => {
         />
       </div>
 
-      {/* Контент профиля */}
+      
       <div className="lg:w-[80%] w-full h-full overflow-auto flex flex-col">
         <Routes>
           <Route path="/" element={<UserProfile />} />

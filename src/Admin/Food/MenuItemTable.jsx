@@ -64,13 +64,19 @@ const MenuItemTable = ({ isDashboard, name }) => {
   
 
   const handleFoodAvialability = (foodId) => {
-    dispatch(updateMenuItemsAvailability({foodId,jwt:auth.jwt || jwt}));
+    dispatch(updateMenuItemsAvailability({ foodId, jwt: auth.jwt || jwt }))
+      .catch(error => {
+        console.error("error with food avialability", error);
+      });
   };
-
+  
   const handleDeleteFood = (foodId) => {
-    dispatch(deleteFoodAction({foodId,jwt:auth.jwt || jwt}));
+    dispatch(deleteFoodAction({ foodId, jwt: auth.jwt || jwt }))
+      .catch(error => {
+        console.error("error delete food:", error);
+      });
   };
-
+  
   return (
     <Box width={"100%"}>
       <Card className="mt-1">

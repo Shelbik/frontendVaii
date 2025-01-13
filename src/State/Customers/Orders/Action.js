@@ -37,6 +37,7 @@ export const getUsersOrders = (jwt) => {
       console.log("users order ",data)
       dispatch(getUsersOrdersSuccess(data));
     } catch (error) {
+      console.log("error", error)
       dispatch(getUsersOrdersFailure(error));
     }
   };

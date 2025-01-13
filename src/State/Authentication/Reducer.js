@@ -29,7 +29,9 @@ const initialState = {
   error: null,
   jwt: null,
   favorites: [],
+  orders:[],
   success: null,
+  
 };
 
 const authReducer = (state = initialState, action) => {
@@ -75,6 +77,7 @@ const authReducer = (state = initialState, action) => {
         isLoading: false,
         user: action.payload,
         favorites: action.payload.favorites,
+        orders:action.payload.orders
       };
       
     case REQUEST_RESET_PASSWORD_SUCCESS:

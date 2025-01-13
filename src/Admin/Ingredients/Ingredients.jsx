@@ -88,31 +88,38 @@ const Ingredients = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {ingredients.ingredients.map((item, index) => (
-                    <TableRow
-                      className="cursor-pointer"
-                      hover
-                      key={item.id}
-                      sx={{
-                        "&:last-of-type td, &:last-of-type th": { border: 0 },
-                      }}
-                    >
-                      <TableCell>{item?.id}</TableCell>
+  {Array.isArray(ingredients.ingredients) && ingredients.ingredients.length > 0 ? (
+    ingredients.ingredients.map((item, index) => (
+      <TableRow
+        className="cursor-pointer"
+        hover
+        key={item?.id || index} // Используем резервный ключ (index), если id отсутствует
+        sx={{
+          "&:last-of-type td, &:last-of-type th": { border: 0 },
+        }}
+      >
+        <TableCell>{item?.id || "N/A"}</TableCell>
+        <TableCell>{item?.name || "Unnamed"}</TableCell>
+        <TableCell>{item?.category?.name || "Uncategorized"}</TableCell>
+        <TableCell>
+          <Button
+            onClick={() => handleUpdateStocke(item?.id)}
+            color={item?.inStoke ? "success" : "primary"}
+          >
+            {item?.inStoke ? "in stock" : "out of stock"}
+          </Button>
+        </TableCell>
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={4} align="center">
+        No ingredients available.
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
 
-                      <TableCell className="">{item.name}</TableCell>
-                      <TableCell className="">{item.category.name}</TableCell>
-
-                      <TableCell className="">
-                        <Button
-                          onClick={() => handleUpdateStocke(item.id)}
-                          color={item.inStoke ? "success" : "primary"}
-                        >
-                          {item.inStoke ? "in stock" : "out of stock"}
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
               </Table>
             </TableContainer>
           </Card>
@@ -143,21 +150,29 @@ const Ingredients = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {ingredients.category?.map((item, index) => (
-                    <TableRow
-                      className="cursor-pointer"
-                      hover
-                      key={item.id}
-                      sx={{
-                        "&:last-of-type td, &:last-of-type th": { border: 0 },
-                      }}
-                    >
-                      <TableCell>{item?.id}</TableCell>
+  {Array.isArray(ingredients.category) && ingredients.category.length > 0 ? (
+    ingredients.category.map((item, index) => (
+      <TableRow
+        className="cursor-pointer"
+        hover
+        key={item?.id || index}
+        sx={{
+          "&:last-of-type td, &:last-of-type th": { border: 0 },
+        }}
+      >
+        <TableCell>{item?.id || "N/A"}</TableCell>
+        <TableCell>{item?.name || "Unnamed"}</TableCell>
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={2} align="center">
+        No categories available.
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
 
-                      <TableCell className="">{item.name}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
               </Table>
             </TableContainer>
           </Card>
