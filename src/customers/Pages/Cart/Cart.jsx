@@ -158,7 +158,7 @@ const Cart = () => {
 ) : (
   <p>No addresses available.</p>
 )}
-a
+
 
               <Card className="flex flex-col justify-center items-center p-5  w-64 ">
                 <div className="flex space-x-5">

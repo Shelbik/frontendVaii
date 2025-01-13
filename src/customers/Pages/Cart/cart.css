@@ -1,0 +1,61 @@
+/* For the main container to allow scrolling */
+.cart-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Ensure elements wrap on smaller screens */
+    height: auto;
+    max-height: 100vh; /* Prevent overflowing the viewport */
+    overflow-y: auto; /* Allow vertical scroll if content overflows */
+  }
+  
+  /* For the left and right sections */
+  .cart-left-section,
+  .cart-right-section {
+    min-height: 100vh; /* Make sure sections take up at least the height of the viewport */
+    flex-grow: 1;
+    overflow: hidden; /* Hide any overflowing content in these sections */
+  }
+  
+  /* Add scrolling to the left section */
+  .cart-left-section {
+    padding-top: 2rem; /* Adjust as needed */
+    overflow-y: auto; /* Allow scroll on long lists */
+  }
+  
+  /* Add scrolling to the right section */
+  .cart-right-section {
+    padding-top: 2rem;
+    overflow-y: auto; /* Allow scroll */
+  }
+  
+  /* Empty cart screen */
+  .empty-cart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    max-height: 100vh; /* Ensure it does not overflow the viewport */
+    overflow-y: auto;
+  }
+  
+  /* Modal box styles */
+  .modal-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%; /* Responsive width */
+    max-width: 400px;
+    background-color: white;
+    box-shadow: 24px;
+    padding: 1.25rem;
+    overflow-y: auto; /* Allow scroll inside the modal */
+  }
+  
+  /* Address card styles */
+  .address-add-card {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+  }
+  
