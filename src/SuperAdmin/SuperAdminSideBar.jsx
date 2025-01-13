@@ -7,6 +7,9 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import ShopTwoIcon from "@mui/icons-material/ShopTwo";
 import { logout } from "../State/Authentication/Action";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+
 
 const menu = [
   { title: "Restaurants", icon: <ShoppingBagIcon />, path: "/restaurants" },
@@ -17,15 +20,20 @@ const menu = [
 export default function SuperAdminSidebar({ handleClose, open }) {
   const isSmallScreen = useMediaQuery("(max-width:1080px)");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {id} = useParams()
+ 
 
   const handleNavigate = (item) => {
-    navigate(`/super-admin${item.path}`);
     if (item.title === "Logout") {
+      dispatch(logout());
       navigate("/");
-      handleClose(); // Закрыть боковое меню при выходе
+      handleClose();
+    } else {
+      navigate(`/super-admin${item.path}`);
     }
   };
-
+  
   return (
     <React.Fragment>
       <Drawer

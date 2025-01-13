@@ -39,9 +39,6 @@ function App() {
     {auth.user?.role === "ROLE_ADMIN" ? (
       <SuperAdmin/>
     ) : (
-
-    
-
       <Routers />)}
     </ThemeProvider>
   );
