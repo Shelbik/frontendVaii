@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -35,6 +36,9 @@ const MenuProps = {
   },
 };
 
+
+
+
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
   description: Yup.string().required("Description is required"),
@@ -42,12 +46,11 @@ const validationSchema = Yup.object({
     .typeError("Price must be a number")
     .required("Price is required")
     .min(0, "Price must be greater than or equal to 0"),
-
-  imageUrl: Yup.string()
-    .url("Invalid URL format")
-    .required("Image URL is required"),
+  category: Yup.object().required("Category is required"),
+  images: Yup.array().min(1, "At least one image is required"),
+  ingredients: Yup.array().min(1, "At least one ingredient is required"),
   vegetarian: Yup.boolean().required("Is Vegetarian is required"),
-  seasonal: Yup.boolean().required("Is Gluten Free is required"),
+  seasonal: Yup.boolean().required("Is Seasonal is required"),
   quantity: Yup.number()
     .typeError("Quantity must be a number")
     .required("Quantity is required")
@@ -69,6 +72,7 @@ const initialValues = {
 
 const AddMenuForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
   const { restaurant, ingredients, auth ,menu} = useSelector((store) => store);
   const [uploadImage, setUploadingImage] = useState("");
@@ -76,9 +80,9 @@ const AddMenuForm = () => {
 
   const formik = useFormik({
     initialValues,
+    validationSchema, 
     onSubmit: (values) => {
       values.restaurantId = restaurant.usersRestaurant.id;
-
       dispatch(createMenuItem({ menu: values, jwt: auth.jwt || jwt }));
       console.log("values ----- ", values);
     },
@@ -99,6 +103,16 @@ const AddMenuForm = () => {
   };
 
   const [openSnackBar, setOpenSnackBar] = useState(false);
+
+  useEffect(() => {
+    if (menu.message && !menu.error) {
+      // If operation was successful
+      setTimeout(() => {
+        navigate(-1); // Go back to previous page
+      }, 2000); // Wait for 2 seconds so user can see success message
+    }
+  }, [menu.message, menu.error, navigate]);
+
 
   useEffect(() => {
     if (menu.message || menu.error) setOpenSnackBar(true);
