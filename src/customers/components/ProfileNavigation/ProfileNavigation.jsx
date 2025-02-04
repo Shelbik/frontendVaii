@@ -1,4 +1,4 @@
-import { Divider, Drawer, useMediaQuery } from "@mui/material"; 
+import { Divider, Drawer, useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../../State/Authentication/Action";
 import { useDispatch } from "react-redux";
@@ -11,7 +11,6 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import EventIcon from '@mui/icons-material/Event';
 import LogoutIcon from '@mui/icons-material/Logout';
 import React from "react";
-
 
 const menu = [
   { title: "Orders", icon: <ShoppingBagIcon />, path: "orders" },
@@ -32,37 +31,43 @@ const ProfileNavigation = ({ open, handleClose }) => {
   const handleNavigate = (item) => {
     if (item.title === "Logout") {
       dispatch(logout());
-      navigate("/"); // Перенаправление на главную страницу после выхода
+      navigate("/");
     } else {
       navigate(`/my-profile/${item.path}`);
     }
-    handleClose(); // Закрытие меню после выбора
+    handleClose();
   };
 
   return (
     <Drawer
-      variant={isSmallScreen ? "temporary" : "permanent"} 
+      variant={isSmallScreen ? "temporary" : "permanent"}
       onClose={handleClose}
-      open={isSmallScreen ? open : true} 
+      open={isSmallScreen ? open : true}
       anchor="left"
-      sx={{ zIndex: 1, position: "sticky" , overflowY:"auto"}}
-      
+      sx={{
+        zIndex: 1,
+        position: "sticky",
+        '& .MuiDrawer-paper': {
+          width: isSmallScreen ? '50vw' : '20vw',
+          boxSizing: 'border-box',
+        },
+      }}
     >
-      <div className="w-[50vw] lg:w-[20vw] h-[100vh] flex flex-col justify-center text-xl pt-16 gap-6">
-        {menu.map((item, i) => (
-          <React.Fragment key={i}>
-            <div
-              onClick={() => handleNavigate(item)}  
-              className="px-5 flex items-center space-x-5 cursor-pointer"
-            >
-              {item.icon}
-              <span>{item.title}</span>
+      <div className="w-full h-[100vh] flex flex-col justify-between py-20">
+        <div className="flex-grow flex flex-col" style={{ gap: '0px' }}>
+          {menu.map((item, i) => (
+            <div key={i} className="flex flex-col" style={{ flex: '1' }}>
+              <div
+                onClick={() => handleNavigate(item)}
+                className="px-5 flex items-center space-x-5 cursor-pointer  h-full"
+              >
+                {item.icon}
+                <span>{item.title}</span>
+              </div>
+              {i !== menu.length - 1 && <Divider />}
             </div>
-
-           
-            {i !== menu.length - 1 && <Divider />}
-          </React.Fragment>
-        ))}
+          ))}
+        </div>
       </div>
     </Drawer>
   );
