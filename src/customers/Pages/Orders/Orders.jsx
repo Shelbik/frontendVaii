@@ -1,38 +1,51 @@
-import React, { useEffect } from 'react'
-import OrderCard from '../../components/Order/OrderCard'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+// Update these import paths to match your project structure
 import { getUsersOrders } from '../../../State/Customers/Orders/Action';
+import OrderCard from '../../components/Order/OrderCard';
+import { CircularProgress } from '@mui/material';
 
 const Orders = () => {
-  const {order,auth}=useSelector(store=>store);
-  const dispatch=useDispatch();
-  const jwt=localStorage.getItem("jwt")
+  const dispatch = useDispatch();
+  const { orders, loading, error } = useSelector((state) => state.order);
+  const jwt = localStorage.getItem("jwt");
 
   useEffect(() => {
-  console.log("Fetching orders...");
-  dispatch(getUsersOrders(jwt));
-}, [auth.jwt]);
+    dispatch(getUsersOrders(jwt));
+  }, [dispatch, jwt]);
 
-useEffect(() => {
-  console.log("Fetched orders:", order.orders);
-}, [order.orders]);
+  console.log("Orders from Redux:", orders);
 
+  if (loading) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <p className="text-red-500">Error loading orders: {error.message}</p>
+      </div>
+    );
+  }
 
   return (
-    <div className='flex items-center flex-col'>
-      <h1 className='text-xl text-center py-7 font-semibold'>My Orders</h1>
-      <div className='space-y-5 w-full lg:w-1/2'>
-      {order.orders && order.orders.map((order) => (
-  order.items?.map((item) => (
-    <OrderCard key={item.id} status={order.orderStatus} order={item} />
-  ))
-))}
-
-
-</div>
-
+    <div className="px-5 lg:px-20">
+      <h1 className="py-7 text-xl font-semibold">Your Orders</h1>
+      <div className="space-y-5">
+        {orders && orders.length > 0 ? (
+          orders.map((order) => (
+            <OrderCard key={order.id} order={order} />
+          ))
+        ) : (
+          <p className="text-center text-gray-500">No orders found</p>
+        )}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Orders
+export default Orders;
