@@ -14,26 +14,39 @@ import {
   TableHead,
   TableRow,
   Typography,
+  IconButton,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
 import { useDispatch, useSelector } from "react-redux";
-import { getCustomers } from "../../State/SuperAdmin/superAdmin.action";
-import { deleteCustomer } from "../../State/SuperAdmin/superAdmin.action";
+import { getCustomers, deleteCustomer } from "../../State/SuperAdmin/superAdmin.action";
+import SuperAdminSidebar from "../SuperAdminSideBar";
 
-const SuperAdminCustomerTable = ({ isDashboard, name }) => {
+const SuperAdminCustomerTable = () => {
   const dispatch = useDispatch();
   const { superAdmin } = useSelector((store) => store);
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery('(max-width:1080px)');
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  // Состояние для сортировки
   const [sortConfig, setSortConfig] = useState({
-    key: "fullName", // Поле для сортировки по умолчанию
-    direction: "asc", // Направление сортировки (asc или desc)
+    key: "fullName",
+    direction: "asc",
   });
 
   useEffect(() => {
     dispatch(getCustomers());
-  }, []);
+  }, [dispatch]);
 
-  // Обработчик изменения сортировки
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
+  };
+
+  const handleDrawerOpen = () => {
+    setIsDrawerOpen(true);
+  };
+
   const handleSort = (key) => {
     setSortConfig((prevConfig) => ({
       key,
@@ -41,8 +54,7 @@ const SuperAdminCustomerTable = ({ isDashboard, name }) => {
     }));
   };
 
-  // Сортировка данных
-  const sortedCustomers = [...superAdmin.customers].sort((a, b) => {
+  const sortedCustomers = [...(superAdmin.customers || [])].sort((a, b) => {
     if (a[sortConfig.key] < b[sortConfig.key]) {
       return sortConfig.direction === "asc" ? -1 : 1;
     }
@@ -52,118 +64,215 @@ const SuperAdminCustomerTable = ({ isDashboard, name }) => {
     return 0;
   });
 
-  // Обработчик удаления пользователя
   const handleDelete = (userId) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
-      dispatch(deleteCustomer(userId)); // Передаем id в action
+      dispatch(deleteCustomer(userId));
     }
   };
-  
 
   return (
-    <Box width={"100%"}>
-      <Card className="mt-1">
-        <CardHeader
-          title={name}
-          sx={{
-            pt: 2,
-            alignItems: "center",
-            "& .MuiCardHeader-action": { mt: 0.6 },
-          }}
-        />
-        <TableContainer>
-          <Table aria-label="table in dashboard">
-            <TableHead>
-              <TableRow>
-                <TableCell>Image</TableCell>
-                <TableCell
-                  onClick={() => handleSort("fullName")}
-                  style={{ cursor: "pointer", fontWeight: "bold" }}
-                >
-                  Full Name
-                  {sortConfig.key === "fullName" ? ` (${sortConfig.direction})` : ""}
-                </TableCell>
-                <TableCell
-                  onClick={() => handleSort("id")}
-                  style={{ cursor: "pointer", fontWeight: "bold" }}
-                >
-                  User Id
-                  {sortConfig.key === "id" ? ` (${sortConfig.direction})` : ""}
-                </TableCell>
-                <TableCell
-                  onClick={() => handleSort("email")}
-                  style={{ cursor: "pointer", fontWeight: "bold" }}
-                >
-                  Email
-                  {sortConfig.key === "email" ? ` (${sortConfig.direction})` : ""}
-                </TableCell>
-                <TableCell
-                  onClick={() => handleSort("role")}
-                  style={{ cursor: "pointer", fontWeight: "bold" }}
-                >
-                  User Role
-                  {sortConfig.key === "role" ? ` (${sortConfig.direction})` : ""}
-                </TableCell>
-                <TableCell>Action</TableCell> {/* Добавлена колонка для кнопки */}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {sortedCustomers
-                .slice(0, isDashboard ? 7 : sortedCustomers.length)
-                .map((item) => (
-                  <TableRow
-                    hover
-                    key={item.id}
+    <>
+      <SuperAdminSidebar 
+        open={isDrawerOpen} 
+        handleClose={handleDrawerClose} 
+      />
+      
+      <Box
+        sx={{
+          height: "100vh",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          overflow: "hidden",
+          bgcolor: "background.default",
+          ml: isSmallScreen ? 0 : '20vw',
+          width: isSmallScreen ? '100vw' : '80vw',
+        }}
+      >
+        <Card sx={{ height: "100%", borderRadius: 0, boxShadow: 'none' }}>
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center',
+            p: { xs: 1, sm: 2 },
+            borderBottom: 1,
+            borderColor: 'divider',
+            bgcolor: 'primary.main',
+            color: 'primary.contrastText'
+          }}>
+            <IconButton 
+              color="inherit"
+              sx={{ 
+                mr: 2,
+                display: isSmallScreen ? 'block' : 'none'
+              }}
+              onClick={handleDrawerOpen}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div">
+              Customer Management
+            </Typography>
+          </Box>
+
+          <TableContainer 
+            sx={{ 
+              height: "calc(100vh - 64px)",
+              overflowX: "auto",
+              "&::-webkit-scrollbar": {
+                width: "8px",
+                height: "8px",
+              },
+              "&::-webkit-scrollbar-track": {
+                backgroundColor: "#f1f1f1",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#888",
+                borderRadius: "4px",
+                "&:hover": {
+                  backgroundColor: "#555",
+                },
+              },
+            }}
+          >
+            <Table stickyHeader size={isSmallScreen ? "small" : "medium"}>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ width: { xs: "40px", sm: "60px" } }}>
+                    Image
+                  </TableCell>
+                  <TableCell
+                    onClick={() => handleSort("fullName")}
                     sx={{
-                      "&:last-of-type td, &:last-of-type th": { border: 0 },
+                      cursor: "pointer",
+                      width: { xs: "100px", sm: "200px" },
                     }}
                   >
-                    <TableCell>
-                      <Avatar alt={item.fullName} src={item.imageUrl} />
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        py: (theme) => `${theme.spacing(0.5)} !important`,
-                      }}
-                    >
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
-                        <Typography
-                          sx={{
-                            fontWeight: 500,
-                            fontSize: "0.875rem !important",
-                          }}
-                        >
-                          {item.fullName}
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      Full Name
+                      {sortConfig.key === "fullName" && 
+                        <Typography variant="caption" sx={{ ml: 1 }}>
+                          ({sortConfig.direction})
                         </Typography>
-                      </Box>
+                      }
+                    </Box>
+                  </TableCell>
+                  <TableCell
+                    onClick={() => handleSort("email")}
+                    sx={{
+                      cursor: "pointer",
+                      width: { xs: "120px", sm: "250px" },
+                    }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      Email
+                      {sortConfig.key === "email" && 
+                        <Typography variant="caption" sx={{ ml: 1 }}>
+                          ({sortConfig.direction})
+                        </Typography>
+                      }
+                    </Box>
+                  </TableCell>
+                  <TableCell
+                    onClick={() => handleSort("role")}
+                    sx={{
+                      cursor: "pointer",
+                      width: { xs: "70px", sm: "150px" },
+                    }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      Role
+                      {sortConfig.key === "role" && 
+                        <Typography variant="caption" sx={{ ml: 1 }}>
+                          ({sortConfig.direction})
+                        </Typography>
+                      }
+                    </Box>
+                  </TableCell>
+                  <TableCell sx={{ width: { xs: "50px", sm: "100px" } }}>
+                    Action
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {sortedCustomers.map((item) => (
+                  <TableRow key={item.id} hover>
+                    <TableCell>
+                      <Avatar
+                        src={item.imageUrl}
+                        alt={item.fullName}
+                        sx={{
+                          width: { xs: 30, sm: 40 },
+                          height: { xs: 30, sm: 40 },
+                        }}
+                      />
                     </TableCell>
-                    <TableCell>{item.id}</TableCell>
-                    <TableCell>{item.email}</TableCell>
-                    <TableCell>{item.role}</TableCell>
+                    <TableCell sx={{ 
+                      maxWidth: 0,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      fontSize: { xs: '0.75rem', sm: '0.875rem' }
+                    }}>
+                      {item.fullName}
+                    </TableCell>
+                    <TableCell sx={{ 
+                      maxWidth: 0,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      fontSize: { xs: '0.75rem', sm: '0.875rem' }
+                    }}>
+                      {item.email}
+                    </TableCell>
+                    <TableCell>
+                      <Typography
+                        component="span"
+                        sx={{
+                          px: { xs: 1, sm: 2 },
+                          py: 0.5,
+                          borderRadius: 1,
+                          fontSize: { xs: "0.7rem", sm: "0.875rem" },
+                          bgcolor: item.role === "ADMIN" ? "error.light" : "success.light",
+                          color: item.role === "ADMIN" ? "error.dark" : "success.dark",
+                        }}
+                      >
+                        {item.role}
+                      </Typography>
+                    </TableCell>
                     <TableCell>
                       <Button
                         variant="contained"
                         color="error"
-                        size="small"
-                        onClick={() => handleDelete(item.id)} // Вызов обработчика удаления
+                        size={isSmallScreen ? "small" : "medium"}
+                        onClick={() => handleDelete(item.id)}
+                        sx={{
+                          minWidth: { xs: "40px", sm: "auto" },
+                          px: { xs: 1, sm: 2 },
+                          py: 0.5,
+                          fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                        }}
                       >
-                        Delete
+                        {isSmallScreen ? "Del" : "Delete"}
                       </Button>
                     </TableCell>
                   </TableRow>
                 ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Card>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
 
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={superAdmin.loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    </Box>
+        <Backdrop
+          open={superAdmin.loading}
+          sx={{
+            color: "#fff",
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </Box>
+    </>
   );
 };
 

@@ -10,19 +10,17 @@ import { logout } from "../State/Authentication/Action";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
-
 const menu = [
   { title: "Restaurants", icon: <ShoppingBagIcon />, path: "/restaurants" },
   { title: "Customers", icon: <ShopTwoIcon />, path: "/customers" },
   { title: "Logout", icon: <LogoutIcon />, path: "/" },
 ];
 
-export default function SuperAdminSidebar({ handleClose, open }) {
+const SuperAdminSidebar = ({ handleClose, open }) => {
   const isSmallScreen = useMediaQuery("(max-width:1080px)");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {id} = useParams()
- 
+  const { id } = useParams();
 
   const handleNavigate = (item) => {
     if (item.title === "Logout") {
@@ -31,19 +29,28 @@ export default function SuperAdminSidebar({ handleClose, open }) {
       handleClose();
     } else {
       navigate(`/super-admin${item.path}`);
+      if (isSmallScreen) {
+        handleClose();
+      }
     }
   };
-  
+
   return (
-    <React.Fragment>
-      <Drawer
-        sx={{ zIndex: 1 }}
-        anchor={"left"} // Меню будет выдвигаться слева
-        open={open}
-        onClose={handleClose} // Закрытие меню при клике вне его
-        variant={isSmallScreen ? "temporary" : "permanent"} // Для мобильных - временное меню
-      >
-        <div className="w-[50vw] lg:w-[20vw] group h-[100vh] flex flex-col justify-center text-xl space-y-8">
+    <Drawer
+      sx={{ 
+        zIndex: 1,
+        '& .MuiDrawer-paper': {
+          width: isSmallScreen ? '50vw' : '20vw',
+          boxSizing: 'border-box',
+        },
+      }}
+      anchor="left"
+      open={open}
+      onClose={handleClose}
+      variant={isSmallScreen ? "temporary" : "permanent"}
+    >
+      <div className="h-[100vh] flex flex-col justify-between py-20">
+        <div className="flex flex-col flex-grow justify-evenly">
           <Divider />
           {menu.map((item, i) => (
             <React.Fragment key={i}>
@@ -58,7 +65,9 @@ export default function SuperAdminSidebar({ handleClose, open }) {
             </React.Fragment>
           ))}
         </div>
-      </Drawer>
-    </React.Fragment>
+      </div>
+    </Drawer>
   );
-}
+};
+
+export default SuperAdminSidebar;
