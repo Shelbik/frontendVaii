@@ -20,12 +20,19 @@ import { useDispatch } from "react-redux";
 import { addToFavorites, deleteRestaurant, updateRestaurant, updateRestaurantStatus } from "../../State/Customers/Restaurant/restaurant.action";
 
 export default function RestaurantCard({ item }) {
+  const jwt = localStorage.getItem("jwt");
   const navigate = useNavigate();
   const dispatch=useDispatch()
-const handleDeleteRestaurant=()=>{
-  dispatch(deleteRestaurant(item.id))
-}
-
+  const handleDeleteRestaurant = () => {
+   
+    if (window.confirm('Are you sure you want to delete this restaurant?')) {
+      dispatch(deleteRestaurant({ 
+        restaurantId: item.id,
+        jwt: jwt
+      }));
+      navigate('/')
+    }
+  };
 const handleUpdateRestaurantStatus=()=>{
   dispatch(updateRestaurantStatus(item.id))
 }
@@ -38,7 +45,7 @@ const handleUpdateRestaurantStatus=()=>{
             sx={{ bgcolor: "#e91e63", color: "white" }}
             aria-label="recipe"
           >
-            Z
+          
           </Avatar>
         }
         action={
@@ -47,20 +54,12 @@ const handleUpdateRestaurantStatus=()=>{
           </IconButton>
         }
         title={item.name}
-        subheader="September 14, 2016"
       />
-      {/* <CardMedia
-        component="img"
-        height="194"
-        image={item.imageUrl}
-        alt="Paella dish"
-      /> */}
+      
       <img className="h-[17rem] w-full object-cover" src={item.imageUrl} alt="" />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+    
         </Typography>
       </CardContent>
       <CardActions disableSpacing>

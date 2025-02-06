@@ -53,18 +53,14 @@ const restaurantReducer = (state = initialState, action) => {
         usersRestaurant: action.payload,
       };
 
-    case actionTypes.DELETE_RESTAURANT_SUCCESS:
-      return {
-        ...state,
-        error: null,
-        loading: false,
-        restaurants: state.restaurants.filter(
-          (item) => item.id !== action.payload
-        ),
-        usersRestaurant: state.usersRestaurant.filter(
-          (item) => item.id !== action.payload
-        ),
-      };
+      case actionTypes.DELETE_RESTAURANT_SUCCESS:
+  return {
+    ...state,
+    error: null,
+    loading: false,
+    restaurants: state.restaurants.filter(item => item.id !== action.payload),
+    usersRestaurant: state.usersRestaurant?.id === action.payload ? null : state.usersRestaurant
+  };
 
     case actionTypes.CREATE_EVENTS_SUCCESS:
       return {

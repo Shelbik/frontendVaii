@@ -1,6 +1,9 @@
 // Actions.js
 
 import { api } from "../../../config/api";
+
+import { logout } from "../../../State/Authentication/Action";
+
 import {
   createRestaurantFailure,
   createRestaurantRequest,
@@ -146,20 +149,28 @@ export const deleteRestaurant = ({ restaurantId, jwt }) => {
     dispatch(deleteRestaurantRequest());
 
     try {
-      const res = await api.delete(`/api/admin/restaurant/${restaurantId}`, {
+      const res = await api.delete(`/api/admin/restaurants/${restaurantId}`, {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
       });
-      console.log("delete restaurant ", res.data);
+      
+      console.log("delete restaurant response:", res.data);
       dispatch(deleteRestaurantSuccess(restaurantId));
+
+
+      localStorage.clear();
+      dispatch(logout());
+      window.location.href= "/";
+      
+   
+
     } catch (error) {
-      console.log("catch error ", error);
-      dispatch(deleteRestaurantFailure(error));
+      console.error("Delete restaurant error:", error);
+      dispatch(deleteRestaurantFailure(error.message));
     }
   };
 };
-
 export const updateRestaurantStatus = ({ restaurantId, jwt }) => {
   return async (dispatch) => {
     dispatch({ type: UPDATE_RESTAURANT_STATUS_REQUEST });
