@@ -13,7 +13,7 @@ import AccountSettings from "../../components/AccountSettings/AccountSettings";
 const Profile = ({ openSideBar, setOpenSideBar }) => {
 
   const handleMenuToggle = () => {
-    setOpenSideBar(prevState => !prevState);  // Переключаем состояние (если открыто - закроем, если закрыто - откроем)
+    setOpenSideBar(prevState => !prevState);  
   };
 
   return (

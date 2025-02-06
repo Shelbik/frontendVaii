@@ -89,25 +89,41 @@ const Cart = () => {
     } else setOpenSnakbar(true);
   };
 
-  const createOrderUsingSelectedAddress = (deliveryAddress) => {
-    const data = {
-      token: localStorage.getItem("jwt"),
-      order: {
-        restaurantId: cart.cartItems[0].food.restaurant.id,
-        deliveryAddress: {
-          fullName: "abc",
-          streetAddress: "gujrat",
-          city: "gujrat",
-          state: "gujrat",
-          postalCode: "12345",
-          country: "Slovakia",
-        },
-      },
+  const createOrderUsingSelectedAddress = (selectedAddress) => {
+    const token = localStorage.getItem("jwt");
+    
+    
+    console.log("Token being sent:", {
+        stored: token,
+        authorization: `Bearer ${token}`
+    });
+
+    const restaurantId = cart.cartItems[0]?.food?.restaurant?.id;
+    
+   
+    const reqData = {
+        jwt: token,
+        order: {
+            restaurantId: restaurantId,
+            deliveryAddress: {
+                fullName: selectedAddress.fullName,
+                streetAddress: selectedAddress.streetAddress,
+                city: selectedAddress.city,
+                state: selectedAddress.state,
+                postalCode: selectedAddress.postalCode,
+                country: selectedAddress.country
+            }
+        }
     };
+
+    console.log("Request data:", reqData);
+
     if (isValid(cart.cartItems)) {
-      dispatch(createOrder(data));
-    } else setOpenSnakbar(true);
-  };
+        dispatch(createOrder(reqData));
+    } else {
+        setOpenSnakbar(true);
+    }
+};
 
   const handleCloseSankBar = () => setOpenSnakbar(false);
 

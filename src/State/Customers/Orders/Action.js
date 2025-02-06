@@ -7,23 +7,32 @@ export const createOrder = (reqData) => {
   return async (dispatch) => {
     dispatch(createOrderRequest());
     try {
-      const {data} = await api.post('/api/order', reqData.order,{
-        headers: {
-            Authorization: `Bearer ${reqData.jwt}`,
-          },
+      const token = localStorage.getItem("jwt");
+      
+      console.log("Token being sent:", {
+        stored: token,
+        authorization: `Bearer ${token}`
       });
+
+      const { data } = await api.post('/api/order', reqData.order, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Используем token из localStorage
+        }
+      });
+
+      console.log("Response data:", data);
+
       if(data.payment_url){
         window.location.href=data.payment_url;
       }
-      console.log("created order data",data)
       dispatch(createOrderSuccess(data));
     } catch (error) {
-      console.log("error ",error)
-      dispatch(createOrderFailure(error));
+      console.error("Create order error:", error.response?.data || error.message);
+      dispatch(createOrderFailure(error.response?.data || error.message));
     }
   };
 };
-
 
 export const getUsersOrders = (jwt) => {
   return async (dispatch) => {
