@@ -16,8 +16,7 @@ const validationSchema = Yup.object({
     .required('Restaurant name is required')
     .min(2, 'Name must be at least 2 characters'),
   description: Yup.string()
-    .required('Description is required')
-    .min(10, 'Description must be at least 10 characters'),
+    .required('Description is required'),
   cuisineType: Yup.string()
     .required('Cuisine type is required'),
   streetAddress: Yup.string()
@@ -119,12 +118,12 @@ const CreateRestaurantForm = () => {
   };
 
   return (
-    <div className="py-10 px-5 lg:flex items-center justify-center min-h-screen">
-      <div className="lg:max-w-4xl">
-        <h1 className="font-bold text-2xl text-center py-2">
+    <div className="w-full min-h-[950px] overflow-y-auto p-4 pb-32">
+    <div className="max-w-[430px] mx-auto">
+      <h1 className="font-bold text-2xl text-center mb-6">
           Add New Restaurant
         </h1>
-        <form onSubmit={formik.handleSubmit} className="space-y-4">
+        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
           <Grid container spacing={2}>
             <Grid className="flex flex-wrap gap-5" item xs={12}>
               <input
@@ -206,7 +205,7 @@ const CreateRestaurantForm = () => {
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 id="cuisineType"
@@ -221,7 +220,7 @@ const CreateRestaurantForm = () => {
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 id="openingHours"
@@ -251,7 +250,7 @@ const CreateRestaurantForm = () => {
               />
             </Grid>
 
-            <Grid item xs={4}>
+            <Grid item xs={12} md={4}>
               <TextField
                 fullWidth
                 id="city"
@@ -266,7 +265,7 @@ const CreateRestaurantForm = () => {
               />
             </Grid>
 
-            <Grid item xs={4}>
+            <Grid item xs={12} md={4}>
               <TextField
                 fullWidth
                 id="stateProvince"
@@ -281,7 +280,7 @@ const CreateRestaurantForm = () => {
               />
             </Grid>
 
-            <Grid item xs={4}>
+            <Grid item xs={12} md={4}>
               <TextField
                 fullWidth
                 id="postalCode"
@@ -311,7 +310,7 @@ const CreateRestaurantForm = () => {
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 id="email"
@@ -326,7 +325,7 @@ const CreateRestaurantForm = () => {
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 id="mobile"
@@ -341,7 +340,7 @@ const CreateRestaurantForm = () => {
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 id="twitter"
@@ -354,7 +353,7 @@ const CreateRestaurantForm = () => {
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 id="instagram"
@@ -373,7 +372,9 @@ const CreateRestaurantForm = () => {
             color="primary"
             type="submit"
             disabled={!formik.isValid || formik.isSubmitting}
-            className="mt-4"
+            className="mt-4 mb-24"
+            fullWidth
+            size="large"
           >
             {formik.isSubmitting ? 'Creating...' : 'Create Restaurant'}
           </Button>
